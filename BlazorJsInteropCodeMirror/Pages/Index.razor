@@ -1,9 +1,25 @@
 ﻿@page "/"
+@inject IJSRuntime JSRuntime
+@using BlazorJsInteropCodeMirror.Components
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<EditFeatureFile FeatureFileText="@_code" />
 
-Welcome to your new app.
+@code {
+    private string _code =
+@"Feature: Gherkin Editor
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+A sample feature file
+
+Rule: The editor contents have Gherkin syntax highlighting
+
+Scenario: A valid gherkin file
+  Given the codemirror editor contains valid gherkin
+  When it is rendered
+  Then there is syntax highlighting
+
+# a comment for illustration
+";
+    
+}
