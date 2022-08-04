@@ -1,67 +1,17 @@
-﻿@inject IJSRuntime JSRuntime
-@using Gherkin
+﻿@inherits EditFeatureFileBase
 
-<div class="width-100-pc row">
-    <div class="col-11 feature-file-content">
-        <textarea style="@(_gherkinParsingErrors == "" ? "display:none;" : "font-family: monospace; font-size: 10px; height: 200px;")" @ref="_parsingErrorsTextArea">@_gherkinParsingErrors</textarea>
-        <textarea id="featureFileTextArea" class="codeTextArea" @ref="_codeMirrorTextArea"></textarea>
+<div class="row">
+    <div class="col-11">
+        <textarea @ref="_codeMirrorTextArea"></textarea>
     </div>
     <div class="col-1">
-        <button id="check-button" type="button" class="btn btn-primary marginTopAndBottom-4 float-right" @onclick="@(() => Check())">Check</button>
-        <button id="save-button" type="button" class="btn btn-primary marginTopAndBottom-4 float-right" @onclick="@(() => SaveFeatureFile())">Save</button>
+        <button type="button" class="btn btn-primary float-right" @onclick="@(() => SaveFeatureFile())">Save</button>
     </div>
 </div>
 
-@code
-{
-    [Parameter] public string FeatureFileText { get; set; } = "";
-    private ElementReference _codeMirrorTextArea;
-    private ElementReference _parsingErrorsTextArea;
-    private string _gherkinParsingErrors = "";
+<br />
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            JSRuntime.InvokeAsync<object>("codemirror.create", _codeMirrorTextArea, FeatureFileText);
-        }
-        else
-        {
-            JSRuntime.InvokeAsync<object>("codemirror.updateCodeMirror", _codeMirrorTextArea, FeatureFileText);
-            if (_gherkinParsingErrors != "")
-            {
-                JSRuntime.InvokeAsync<object>("codemirror.updateCodeMirror", _parsingErrorsTextArea, _gherkinParsingErrors);
-            }
-        }
-    }
-
-
-    public async void SaveFeatureFile()
-    {
-        //var featureFile = await JSRuntime.InvokeAsync<string>("codemirror.getValue", _codeMirrorTextArea);
-    }
-
-    public async void Check()
-    {
-        //var featureFile = await JSRuntime.InvokeAsync<string>("codemirror.getValue", _codeMirrorTextArea);
-
-        //_gherkinParsingErrors = ;
-    }
-
-    [JSInvokable]
-    public static string UpdateFeatureFile(string updatedFeature)
-    {
-        Console.WriteLine(updatedFeature);
-        var parser = new Gherkin.Parser();
-        try
-        {
-            var textReader = new StringReader(updatedFeature);
-            var gherkinDocument = parser.Parse(textReader);
-            return "";
-        }
-        catch (CompositeParserException e)
-        {
-            return e.Message;
-        }
-    }
-}
+<div class="row">
+    <label>Saved Feature File:</label>
+    <textarea style="height:200px">@_savedFeatureFile</textarea>
+</div>

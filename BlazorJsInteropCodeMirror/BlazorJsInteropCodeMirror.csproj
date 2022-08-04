@@ -7,13 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Components\EditFeatureFile.razor.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components\EditFeatureFile.razor.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Gherkin" Version="23.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\codemirror\codemirrorwrapper.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\codemirror\lib\codemirror.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
