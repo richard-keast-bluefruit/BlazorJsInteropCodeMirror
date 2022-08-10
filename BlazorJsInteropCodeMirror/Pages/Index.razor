@@ -4,10 +4,22 @@
 
 <PageTitle>Index</PageTitle>
 
-<EditFeatureFile FeatureFileText="@_code" />
+<div class="row">
+    <label>Example Feature Files:</label>
+    <div class="col-6">
+        <textarea class="code-text-area" disabled="disabled">@_exampleFeature1</textarea>
+        <button type="button" class="btn btn-primary float-end" @onclick="@(() => EditFeatureFile(1))">Edit</button>
+    </div>
+    <div class="col-6">
+        <textarea class="code-text-area" disabled="disabled">@_exampleFeature2</textarea>
+        <button type="button" class="btn btn-primary float-end" @onclick="@(() => EditFeatureFile(2))">Edit</button>
+    </div>
+</div>
+
+<EditFeatureFile FeatureFileText="@_featureToEdit" OnSave="OnSaveHandler"/>
 
 @code {
-    private string _code =
+    private static string _exampleFeature1 =
 @"Feature: Gherkin Editor
 
 A sample feature file
@@ -21,5 +33,47 @@ Scenario: A valid gherkin file
 
 # a comment for illustration
 ";
-    
+
+    private static string _exampleFeature2 =
+@"Feature: Overdue tasks
+  Let users know when tasks are overdue, even when using other
+  features of the app
+
+  Rule: Users are notified about overdue tasks on first use of the day
+    Background:
+      Given I have overdue tasks
+
+    Scenario: First use of the day
+      Given I last used the app yesterday
+      When I use the app
+      Then I am notified about overdue tasks
+
+    Scenario: Already used today
+      Given I last used the app earlier today
+      When I use the app
+      Then I am not notified about overdue tasks
+";
+    private int _currentExampleNumber = 1;
+    private string _featureToEdit = _exampleFeature1;
+
+
+    private void EditFeatureFile(int exampleNumber)
+    {
+        _currentExampleNumber = exampleNumber;
+        _featureToEdit = (exampleNumber == 1 ? _exampleFeature1 : _exampleFeature2);
+        StateHasChanged();
+    }
+
+    private void OnSaveHandler(string featureFile)
+    {
+        if (_currentExampleNumber == 1)
+        {
+            _exampleFeature1 = featureFile;
+        }
+        else if (_currentExampleNumber == 2)
+        {
+            _exampleFeature2 = featureFile;
+        }
+        EditFeatureFile(_currentExampleNumber);
+    }
 }

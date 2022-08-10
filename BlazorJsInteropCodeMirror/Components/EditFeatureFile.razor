@@ -5,13 +5,8 @@
         <textarea @ref="_codeMirrorTextArea"></textarea>
     </div>
     <div class="col-1">
-        <button type="button" class="btn btn-primary float-right" @onclick="@(() => SaveFeatureFile())">Save</button>
+        <button type="button" class="btn btn-primary float-right position:absolute" @onclick="@(() => SaveFeatureFile())">Save</button>
     </div>
 </div>
 
 <br />
-
-<div class="row">
-    <label>Saved Feature File:</label>
-    <textarea style="height:200px">@_savedFeatureFile</textarea>
-</div>

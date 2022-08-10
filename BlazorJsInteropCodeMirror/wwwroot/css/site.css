@@ -79,3 +79,10 @@ a, .btn-link {
     padding: 0 3px;
     margin-right: 7px;
 }
+
+.code-text-area {
+    height: 200px;
+    width: 85%;
+    font-family: Consolas;
+    font-size: 6pt;
+}

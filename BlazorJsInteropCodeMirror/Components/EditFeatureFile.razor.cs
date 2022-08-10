@@ -8,10 +8,10 @@ namespace BlazorJsInteropCodeMirror.Components
     {
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Parameter] public string FeatureFileText { get; set; } = "";
+        [Parameter] public EventCallback<string> OnSave { get; set; }
         private IJSObjectReference _editFeatureFileJsModule;
         protected ElementReference _codeMirrorTextArea;
-        protected string _savedFeatureFile = "";
-
+        
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
@@ -31,8 +31,8 @@ namespace BlazorJsInteropCodeMirror.Components
 
         public async void SaveFeatureFile()
         {
-            _savedFeatureFile = await _editFeatureFileJsModule.InvokeAsync<string>("getEditorText", _codeMirrorTextArea);
-            StateHasChanged();
+            var featureFileToSave = await _editFeatureFileJsModule.InvokeAsync<string>("getEditorText", _codeMirrorTextArea);
+            await OnSave.InvokeAsync(featureFileToSave);
         }
 
         [JSInvokable]
@@ -61,9 +61,8 @@ namespace BlazorJsInteropCodeMirror.Components
                 .ReplaceLineEndings()
                 .Split(Environment.NewLine, StringSplitOptions.None);
 
-            for (var i = 1; i < errorLines.Count(); i++)
+            foreach (var line in errorLines.Skip(1))
             {
-                var line = errorLines[i];
                 var firstIndexOfColon = line.IndexOf(':');
                 var firstIndexOfSpace = line.IndexOf(' ');
                 var lineNumber = line.Substring(1, firstIndexOfColon - 1);
