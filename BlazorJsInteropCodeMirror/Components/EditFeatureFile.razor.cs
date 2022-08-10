@@ -9,16 +9,15 @@ namespace BlazorJsInteropCodeMirror.Components
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Parameter] public string FeatureFileText { get; set; } = "";
         [Parameter] public EventCallback<string> OnSave { get; set; }
-        private IJSObjectReference _editFeatureFileJsModule;
         protected ElementReference _codeMirrorTextArea;
+        private IJSObjectReference _editFeatureFileJsModule;
         
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
                 _editFeatureFileJsModule = 
-                    await JSRuntime.InvokeAsync<IJSObjectReference>("import", 
-                        "./Components/EditFeatureFile.razor.js");
+                    await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/EditFeatureFile.razor.js");
 
                 await _editFeatureFileJsModule.InvokeVoidAsync("createCodeMirrorFromTextArea", _codeMirrorTextArea, FeatureFileText);
             }

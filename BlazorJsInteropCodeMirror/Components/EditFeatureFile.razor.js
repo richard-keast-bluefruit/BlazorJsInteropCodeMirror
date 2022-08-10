@@ -13,6 +13,7 @@ export function createCodeMirrorFromTextArea(textArea, text) {
     codeMirror.on('change', (editor, changeObj) => {
         if (changeObj.origin !== "setValue") {
             clearTimeout(timeoutId);
+            document.getElementById("saveButton").disabled = true;
             timeoutId = setTimeout(() => updateErrorWidgets(editor, widgets), 500);
         }
     });
@@ -38,6 +39,10 @@ function processErrors(errors, editor, widgets) {
     var lineNumbers = [];
     var errorMessages = [];
     var errorLines = errors.split('\n');
+
+    if (errors == "") {
+        document.getElementById("saveButton").disabled = false;
+    }
     for (var i = 0; i < errorLines.length; i++) {
         var [lineNumber, message] = errorLines[i].split(":::");
         lineNumbers.push(lineNumber);
